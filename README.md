@@ -13,3 +13,12 @@ Proyecto base en Node.js con Express y SQL Server para registrar productos.
 
 ```bash
 npm install
+
+
+
+--Descargar la imagen docker de sql server
+docker pull mcr.microsoft.com/mssql/server:2022-latest
+
+--Ejecutar la imangen y conectar a la bd
+docker exec -it sqlserver2022 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P TuPasswordSegura123! -C
+

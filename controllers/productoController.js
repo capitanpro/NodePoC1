@@ -38,3 +38,52 @@ export const guardarProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al guardar el producto' });
   }
 };
+
+export const listarProductos = async (req, res) => {
+    try {
+        // 1. Obtener la conexión al pool
+        const pool = await poolPromise;
+        //const pool = await getConnection();
+
+        // 2. Ejecutar el Procedimiento Almacenado
+        // Si tu SP no requiere parámetros, se usa .execute('NombreSP')
+        const result = await pool.request()
+            .execute('sp_ObtenerProducto'); 
+
+        // 3. Responder con los datos (usualmente están en recordset)
+        res.status(200).json(result.recordset);
+
+    } catch (error) {
+        // Manejo de errores profesional
+        console.error("Error al listar productos:", error);
+        res.status(500).json({
+            message: "Error interno del servidor al obtener productos",
+            error: error.message
+        });
+    }
+};
+
+export const listarProductoPorId = async (req, res) => {
+    // 1. Obtener el ID desde los parámetros de la URL
+    const { id } = req.params;
+
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            // 2. Definir el parámetro de entrada (Nombre en SP, Tipo, Valor)
+            .input('id', sql.Int, id)
+            // 3. Ejecutar el SP que ahora recibe el ID
+            .execute('sp_ObtenerProducto'); 
+
+        // 4. Validar si el producto existe
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+
+        // Retornamos solo el primer objeto del array (el producto encontrado)
+        res.json(result.recordset[0]);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message, lst:"(-sp_ObtenerProducto)" });
+    }
+};
