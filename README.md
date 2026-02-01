@@ -19,6 +19,12 @@ npm install
 --Descargar la imagen docker de sql server
 docker pull mcr.microsoft.com/mssql/server:2022-latest
 
+-- Abrir Docker Desktop  desde PowerShell 
+Start-Process "Docker Desktop"
+
 --Ejecutar la imangen y conectar a la bd
 docker exec -it sqlserver2022 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P TuPasswordSegura123! -C
 
+
+Validar docker
+docker run hello-world
