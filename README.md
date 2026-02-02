@@ -28,6 +28,8 @@ docker pull mcr.microsoft.com/mssql/server:2022-latest
 --Crear y arrancar el contenero con nombre:sqlserver2022
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=TuPasswordSegura123!"  -p 1433:1433 --name sqlserver2022 -d mcr.microsoft.com/mssql/server:2022-latest
 
+-- Si ya existe y solo se requiere iniciar el contenedor
+docker start sqlserver2022
 
 --Entrar al contenedor y ejecutar el comando sqlcmd
 docker exec -it sqlserver2022 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P TuPasswordSegura123! -C
@@ -70,3 +72,18 @@ Nombrar:
 --Material Icon Theme
 --Postman
 --Sql Server 
+
+
+////////////////////// NODE //////////////////////////////////
+Definir la función asíncrona que reciba req y res
+
+    export const crearProducto = async (req, res) => {
+        try {
+        } catch (error) {
+        
+        }
+    };
+
+Capturar datos de la petición y extraer los parámetros necesarios desde req.body.
+
+
