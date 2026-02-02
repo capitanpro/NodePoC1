@@ -27,7 +27,7 @@ export const crearProducto = async (req, res) => {
     request.input('Servicio', sql.SmallInt, Servicio ?? null);
     request.input('Status', sql.SmallInt, Status ?? null);
 
-    const result = await request.execute('spGuardarProducto');
+    const result = await request.execute('spCrearProducto');
 
     res.status(200).json({
       mensaje: ProductoID ? 'Producto actualizado' : 'Producto creado',
@@ -48,7 +48,7 @@ export const listarProductos = async (req, res) => {
         // 2. Ejecutar el Procedimiento Almacenado
         // Si tu SP no requiere parámetros, se usa .execute('NombreSP')
         const result = await pool.request()
-            .execute('sp_ObtenerProducto'); 
+            .execute('spObtenerProducto'); 
 
         // 3. Responder con los datos (usualmente están en recordset)
         res.status(200).json(result.recordset);
@@ -73,7 +73,7 @@ export const obtenerProductoPorId = async (req, res) => {
             // 2. Definir el parámetro de entrada (Nombre en SP, Tipo, Valor)
             .input('id', sql.Int, id)
             // 3. Ejecutar el SP que ahora recibe el ID
-            .execute('sp_ObtenerProducto'); 
+            .execute('spObtenerProducto'); 
 
         // 4. Validar si el producto existe
         if (result.recordset.length === 0) {
@@ -84,6 +84,46 @@ export const obtenerProductoPorId = async (req, res) => {
         res.json(result.recordset[0]);
 
     } catch (error) {
-        res.status(500).json({ error: error.message, lst:"(-sp_ObtenerProducto)" });
+        res.status(500).json({ error: error.message, lst:"(Error en spObtenerProducto)" });
     }
 };
+
+export const eliminarProductoLogico = async(req, res) =>{
+// 1. Obtener el ID desde los parámetros de la URL
+    const { id } = req.params;
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            // 2. Definir el parámetro de entrada (debe coincidir con el nombre en el SP)
+            .input('id', sql.Int, id)
+            // 3. Ejecutar el SP de borrado lógico
+            .execute('spEliminarProductoLogico'); 
+
+        // 4. El SP devuelve un recordset con el mensaje de éxito o fallo
+        // Validamos si el SP retornó un mensaje de "no encontrado"
+          // 4. Validar si el producto existe
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+        
+            // Retornamos solo el primer objeto del array (el producto encontrado)
+        res.json(result.recordset[0]);
+      //  if (mensaje.includes("not found")) {
+        //    return res.status(404).json({ 
+          //      success: false, 
+           //     message: mensaje 
+           // });
+        //}
+
+        // Si todo salió bien
+     //   res.json({
+       //     success: true,
+        //    message: mensaje
+        //});
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message, lst:"(Error en spObtenerProducto)" });
+    }
+
+}

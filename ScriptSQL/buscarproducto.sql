@@ -1,4 +1,8 @@
-CREATE PROCEDURE sp_ObtenerProducto
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[spObtenerProducto]
     @Id INT = NULL
 AS
 BEGIN
@@ -8,14 +12,14 @@ BEGIN
     BEGIN
         -- Si no se pasa parámetro, devuelve todos los registros
         SELECT *
-        FROM Producto;
+        FROM Producto AND p.status=1;
     END
     ELSE
     BEGIN
         -- Si se pasa un Id, devuelve solo ese registro
         SELECT *
         FROM Producto p
-        WHERE p.ProductoID = @Id;
+        WHERE p.ProductoID = @Id AND p.status=1;
     END
 END;
 GO

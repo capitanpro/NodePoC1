@@ -1,5 +1,5 @@
 -- Crear SP para registra o modificar un registro
-CREATE PROCEDURE spGuardarProducto
+CREATE PROCEDURE spCrearProducto
   @ProductoID     INT = NULL,
   @Codigobarra    VARCHAR(50),
   @Descripcion    NVARCHAR(200),

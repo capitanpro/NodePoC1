@@ -1,0 +1,38 @@
+USE dbSmartPOS;
+   /* CREATE TABLE [dbo].[Producto]
+    (
+    [ProductoID] [int] NOT NULL IDENTITY(1, 1),
+    [Codigobarra] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [Descripcion] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [ProveedorID] [int] NOT NULL,
+    [CategoriaID] [int] NOT NULL,
+    [UnidadID] [int] NOT NULL,
+    [MarcaID] [int] NOT NULL,
+    [Servicio] [smallint] NULL CONSTRAINT [DF__Producto__Servic__2DB1C7EE] DEFAULT ((0)),
+    [Status] [smallint] NULL CONSTRAINT [DF__Producto__status__5DEAEAF5] DEFAULT ((1))
+    )
+    go
+*/
+     
+CREATE TABLE [dbo].[Usuario](
+	[UsuarioID] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [varchar](25) NULL,
+	[Apellido] [varchar](25) NULL,
+	[UsuarioNombre] [nvarchar](30) NOT NULL,
+	[Password] [nvarchar](max) NULL,
+	[TipoUsuarioID] [int] NULL,
+	[FechaRegistro] [datetime] NULL,
+	[correo] [nvarchar](50) NULL,
+	[Activo] [smallint] NOT NULL,
+	[Observaciones] [varchar](500) NULL,
+	[RowDelete] [bit] NOT NULL,
+ CONSTRAINT [PK_Usuario] PRIMARY KEY CLUSTERED 
+(
+	[UsuarioID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+ CONSTRAINT [Usuario_uq] UNIQUE NONCLUSTERED 
+(
+	[UsuarioNombre] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO

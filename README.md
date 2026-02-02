@@ -16,15 +16,57 @@ npm install
 
 
 
---Descargar la imagen docker de sql server
-docker pull mcr.microsoft.com/mssql/server:2022-latest
+
+//////////////////////// DOCKER ///////////////////////////////
 
 -- Abrir Docker Desktop  desde PowerShell 
 Start-Process "Docker Desktop"
 
---Ejecutar la imangen y conectar a la bd
-docker exec -it sqlserver2022 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P TuPasswordSegura123! -C
+--Descargar la imagen oficial de docker de sql server
+docker pull mcr.microsoft.com/mssql/server:2022-latest
 
+--Crear y arrancar el contenero con nombre:sqlserver2022
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=TuPasswordSegura123!"  -p 1433:1433 --name sqlserver2022 -d mcr.microsoft.com/mssql/server:2022-latest
+
+
+--Entrar al contenedor y ejecutar el comando sqlcmd
+docker exec -it sqlserver2022 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P TuPasswordSegura123! -C
 
 Validar docker
 docker run hello-world
+
+///////////////////////////////// Git //////////////////////////////////
+
+  git config --global user.email "capitanpro@proton.me"
+  git config --global user.name "Ernesto Cruz"
+  
+https://github.com/capitanpro/NodePoC1
+
+
+//Descargar ramas remotas
+git fetch --all
+
+Descargar e integrar
+//
+git pull
+
+//////////////////////////////////SQL Server ////////////////////////////
+dbSmartPOS 
+CREATE DATABASE dbSmartPOS;
+GO
+
+
+///////////////////////////////// Regla mnemotécnica: ///////////////
+
+Nombrar:
+ - **Archivos y clases** = **SINGULAR** (representan UN módulo/concepto)
+ - **Rutas y tablas de BD** = **PLURAL** (representan colecciones)
+ - **Funciones de controlador** = **Acción descriptiva** (pueden variar según el contexto)
+
+
+
+/////////////////////// Extensiones ////////////////////////
+
+--Material Icon Theme
+--Postman
+--Sql Server 
