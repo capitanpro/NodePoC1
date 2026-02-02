@@ -1,6 +1,6 @@
 import { poolPromise, sql } from '../db.js';
 
-export const guardarProducto = async (req, res) => {
+export const crearProducto = async (req, res) => {
   try {
     const {
       ProductoID,
@@ -63,7 +63,7 @@ export const listarProductos = async (req, res) => {
     }
 };
 
-export const listarProductoPorId = async (req, res) => {
+export const obtenerProductoPorId = async (req, res) => {
     // 1. Obtener el ID desde los parámetros de la URL
     const { id } = req.params;
 

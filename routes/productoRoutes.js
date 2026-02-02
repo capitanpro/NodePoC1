@@ -1,18 +1,19 @@
 import express from 'express';
-import { guardarProducto } from '../controllers/productoController.js';
+import { crearProducto } from '../controllers/productoController.js';
 import { listarProductos } from '../controllers/productoController.js';
-import { listarProductoPorId } from '../controllers/productoController.js';
+import { obtenerProductoPorId } from '../controllers/productoController.js';
 
 
 const router = express.Router();
 
 
-router.get('/productos/:id', listarProductoPorId);
+//Obtener producto por ID
+router.get('/productos/:id', obtenerProductoPorId);
 
-// Ruta para listar productos
+//Listar todos los productos
 router.get('/productos', listarProductos);
 
-// Ruta para insertar producto
-router.post('/producto', guardarProducto);
+//Crear nuevos productos
+router.post('/productos', crearProducto);
 
 export default router;
