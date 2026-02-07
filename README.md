@@ -84,6 +84,37 @@ Definir la función asíncrona que reciba req y res
         }
     };
 
-Capturar datos de la petición y extraer los parámetros necesarios desde req.body.
+Capturar datos de la petición y destructuración de datos, es decir extraer las propiedades directamente del cuerpo d ela petición req.body.
+
+  const {ProductoID,Codigobarra,Descripcion} = req.body;
+
+Conexión con la base de datos, se espera que se resuelva la promesa y con "request" se crea una instancia de consulta vincualda al "pool" de conexiones
+
+    const pool = await poolPromise; //promesa de conexión
+    const request = pool.request(); //crea solicitud vacias para hacer peticiones a la BD
 
 
+Mapeo de inputs (definición explicita para prevenir ataques de Inyección SQL)
+
+    request.input('ProductoID', sql.Int, ProductoID ?? null);
+    request.input('Codigobarra', sql.VarChar(50), Codigobarra);
+    request.input('Descripcion', sql.NVarChar(200), Descripcion);
+
+Ejecución del Stored Procedure: Se invoca el procedimiento almacenado spCrearProducto en SQL Server de forma asíncrona.
+
+    const result = await request.execute('spCrearProducto');
+
+
+Respuesta del servidor para el cliente en formato JSON
+    res.status(200).json({
+        mensaje: ProductoID ? 'Producto actualizado' : 'Producto creado',
+        resultado: result.recordset
+    });
+
+Manejo de errores
+    catch (error) {
+        res.status(500).json({ error: 'Error al guardar el producto' });
+    }
+
+
+¿los nombre que se usan en const crearproducto, const pool, const request, const result, los definie el programador ? o existe una nomenclatura para asignar los nombre

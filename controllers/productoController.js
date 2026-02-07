@@ -33,6 +33,7 @@ export const crearProducto = async (req, res) => {
       mensaje: ProductoID ? 'Producto actualizado' : 'Producto creado',
       resultado: result.recordset
     });
+    
   } catch (error) {
     console.error('❌ Error en guardarProducto:', error);
     res.status(500).json({ error: 'Error al guardar el producto' });
@@ -51,13 +52,59 @@ export const listarProductos = async (req, res) => {
             .execute('spObtenerProducto'); 
 
         // 3. Responder con los datos (usualmente están en recordset)
-        res.status(200).json(result.recordset);
+        res.status(200).json({total: result.recordset.length, data:result.recordset});
 
     } catch (error) {
         // Manejo de errores profesional
         console.error("Error al listar productos:", error);
         res.status(500).json({
             message: "Error interno del servidor al obtener productos",
+            error: error.message
+        });
+    }
+};
+
+export const listarProductosPaginados = async (req, res) => {
+
+    // 1. Obtener parámetros de la query string con valores por defecto
+    const page = parseInt(req.query.page) || 1;
+    const rawSize = parseInt(req.query.size) || 10;
+
+    const size = Math.min(rawSize, 100);
+    try {
+        // 2. Obtener la conexión al pool
+        const pool = await poolPromise;
+        //const pool = await getConnection();
+
+        // 3. Ejecutar el Procedimiento Almacenado
+        // 4. Pasar parámetros al SP
+           
+        const result = await pool.request()
+            .input('Pagina', sql.Int, page)
+            .input('SizePagina', sql.Int, size)
+            .execute('spListarProductosPaginado');
+
+        // 5. Extraer datos de los múltiples recordsets
+        const productos = result.recordsets[0]; // Primer SELECT (los datos)
+        const totalGlobal = result.recordsets[1][0].TotalRegistros; // Segundo SELECT (el conteo)
+
+
+        // 6. Respuesta estructurada profesional
+        res.status(200).json({
+            ok: true,
+            paginaActual: page,
+            registrosPorPagina: size,
+            totalRegistros: totalGlobal,
+            totalPaginas: Math.ceil(totalGlobal / size),
+            data: productos
+        });
+    } catch (error) {
+        // Manejo de errores profesional
+        console.error("Error al listar productos:", error);
+        console.error("Error en paginación:", error);
+        res.status(500).json({
+            ok: false,
+            message: "Error al obtener productos paginados",
             error: error.message
         });
     }
