@@ -3,6 +3,7 @@ import { crearProducto } from '../controllers/productoController.js';
 import { listarProductos } from '../controllers/productoController.js';
 import { obtenerProductoPorId } from '../controllers/productoController.js';
 import {eliminarProductoLogico} from '../controllers/productoController.js'
+import {modificarProducto} from '../controllers/productoController.js'
 import {listarProductosPaginados} from '../controllers/productoController.js'
 
 const router = express.Router();
@@ -23,7 +24,10 @@ router.get('/productos/:id', obtenerProductoPorId);
 //Crear nuevos productos
 router.post('/productos', crearProducto);
 
+//Modificar productos
+router.put('/productos', modificarProducto);
+                         
 //Borrado lógico de productos
-router.delete('/productos/:id',eliminarProductoLogico);
+router.delete('/productos/:id', eliminarProductoLogico);
 
 export default router;
