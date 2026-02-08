@@ -1,10 +1,12 @@
 import express from 'express';
-import { crearProducto } from '../controllers/productoController.js';
-import { listarProductos } from '../controllers/productoController.js';
+//import { listarProductos } from '../controllers/productoController.js';
 import { obtenerProductoPorId } from '../controllers/productoController.js';
-import {eliminarProductoLogico} from '../controllers/productoController.js'
-import {modificarProducto} from '../controllers/productoController.js'
 import {listarProductosPaginados} from '../controllers/productoController.js'
+
+import { crearProducto } from '../controllers/productoController.js';
+import {modificarProducto} from '../controllers/productoController.js'
+import {eliminarProductoLogico} from '../controllers/productoController.js'
+
 
 const router = express.Router();
 

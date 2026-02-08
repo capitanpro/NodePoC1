@@ -75,7 +75,11 @@ Nombrar:
 
 
 ////////////////////// NODE //////////////////////////////////
-Definir la función asíncrona que reciba req y res
+
+0-Importar la promesa de la conexión
+    import { poolPromise, sql } from '../db.js';
+
+1-Definir la función asíncrona que reciba req y res
 
     export const crearProducto = async (req, res) => {
         try {
@@ -84,7 +88,7 @@ Definir la función asíncrona que reciba req y res
         }
     };
 
-Capturar datos de la petición y destructuración de datos, es decir extraer las propiedades directamente del cuerpo d ela petición req.body.
+2-Capturar datos de la petición y destructuración de datos, es decir extraer las propiedades directamente del cuerpo d ela petición req.body.
 
   const {ProductoID,Codigobarra,Descripcion} = req.body;
 

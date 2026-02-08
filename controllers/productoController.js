@@ -75,7 +75,7 @@ export const modificarProducto = async (req, res) => {
 
     res.status(200).json({
       mensaje: ProductoID ? 'Producto actualizado' : 'Producto creado',
-      resultado: result.recordset
+      resultado: result.recordset[0]
     });
     
   } catch (error) {
