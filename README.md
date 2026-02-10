@@ -72,7 +72,7 @@ Nombrar:
 --Material Icon Theme
 --Postman
 --Sql Server 
-
+-- npm install bcrypt
 
 ////////////////////// NODE //////////////////////////////////
 

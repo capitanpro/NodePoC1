@@ -3,7 +3,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [dbo].[sp_InsertUsuario]
+create PROCEDURE [dbo].[sp_InsertUsuario]
     @UsuarioID         INT = 0, -- 0 para crear, > 0 para editar
     @Nombre            NVARCHAR(100),
     @Apellido          NVARCHAR(100),

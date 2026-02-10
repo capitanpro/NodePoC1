@@ -1,47 +1,41 @@
 import { request } from 'express';
 import { poolPromise, sql } from '../db.js';
+import bcrypt from 'bcrypt';
+
 
 export const crearUsuario = async (req, res) => {
+    
     try {
-        const { UsuarioID, Nombre,
-            Apellido,
-            UserName,
-            Correo,
-            Password,
-            TipoUsuarioID,
-            FechaRegistro,
-            FechaUltimoAcceso,
-            Activo,
-            RowDelete,
-            Observaciones } = req.body;
-
-
-            
+        const { UsuarioID, Nombre, Apellido, UserName, Correo, Password,
+            TipoUsuarioID, FechaRegistro, FechaUltimoAcceso,
+            IsActive,  IsDeleted,  Observaciones } = req.body;
+           
         //Invocar la promesa de conexión
         const pool = await poolPromise;
         const request = pool.request();
+        const hashedPassword = await bcrypt.hash(Password, 10);
 
         //mapeo de inputs
         request.input('UsuarioID', sql.Int, UsuarioID ?? null);
         request.input('Nombre', sql.NVarChar, Nombre);
         request.input('Apellido', sql.NVarChar, Apellido);
+        request.input('UserName', sql.NVarChar, UserName);         
+        request.input('Password', sql.NVarChar, hashedPassword);
 
-        request.input('UserName', sql.NVarChar, UserName);
-        request.input('Password', sql.NVarChar, Password);
+        request.input('Correo', sql.NVarChar, Correo)
         request.input('TipoUsuarioId', sql.Int, TipoUsuarioID);
-
-        request.input('FechaRegistro', sql.DateTime, FechaRegistro);
-        request.input('FechaUltimoAcceso', sql.DateTime, FechaUltimoAcceso);
-
-        request.input('IsActive', sql.Bit, Activo);
-        request.input('IsDeleted', sql.Bit, RowDelete);
-
+       // request.input('FechaRegistro', sql.DateTime, FechaRegistro ?? new Date());
+       // request.input('FechaUltimoAcceso', sql.DateTime, FechaUltimoAcceso);
+        request.input('Observaciones', sql.NVarChar, Observaciones)
+       // request.input('IsActive', sql.Bit, IsActive ?? 1);
+       // request.input('IsDeleted', sql.Bit, IsDeleted ?? 0);
+   
         //Ejecución de sp
         const result = await request.execute('sp_InsertUsuario');
 
         //Respuesta del servidor para el cliente en formato JSON
         res.status(200).json({
-            mensaje: ProductoID ? 'Usuario actualizado' : 'Usuario creado',
+            mensaje: UserName ? 'Usuario actualizado' : 'Usuario creado',
             resultado: result.recordset
         });
     }
