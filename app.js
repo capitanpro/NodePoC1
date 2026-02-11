@@ -2,6 +2,8 @@ import express from 'express';
 import productoRoutes from './routes/productoRoutes.js';
 import usuarioRoutes from './routes/usuarioRoutes.js';
 
+require('dotenv').config();
+
 const app = express();
 
 app.use(express.json()); // para leer req.body en JSON

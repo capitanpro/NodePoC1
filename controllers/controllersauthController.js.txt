@@ -1,26 +1,25 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { pool, sql } from '../db.js';
+// controllers/authController.js
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { pool } = require('../db'); // tu módulo de conexión a SQL Server
 
 // Variables de entorno recomendadas:
-const secret = process.env.JWT_SECRET;
-const expires = process.env.JWT_EXPIRES_IN;
+// process.env.JWT_SECRET
+// process.env.JWT_EXPIRES_IN
 
-
-export const login = async (req, res) => {
-  const { UserName, Password } = req.body;
+exports.login = async (req, res) => {
+  const { UsuarioNombre, Password } = req.body;
 
   try {
-
     // Validar entrada
-    if (!UserName || !Password) {
+    if (!UsuarioNombre || !Password) {
       return res.status(400).json({ message: 'Usuario y contraseña son requeridos' });
     }
 
     // Buscar usuario en la base de datos
     const result = await pool.request()
-      .input('UserName', UserName)
-      .query('SELECT * FROM Usuario WHERE UserName = @UserName AND Activo = 1 AND RowDelete = 0');
+      .input('UsuarioNombre', UsuarioNombre)
+      .query('SELECT * FROM Usuario WHERE UsuarioNombre = @UsuarioNombre AND Activo = 1 AND RowDelete = 0');
 
     const usuario = result.recordset[0];
     if (!usuario) {
@@ -42,10 +41,11 @@ export const login = async (req, res) => {
         tipoUsuario: usuario.TipoUsuarioID,
         correo: usuario.correo
       },
-      secret, { expiresIn: expires || '1h' });
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
+    );
 
     return res.status(200).json({
-
       message: 'Login exitoso',
       token
     });
@@ -54,16 +54,4 @@ export const login = async (req, res) => {
     console.error('Error en login:', error);
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
-};
-
-export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Token requerido' });
-
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) return res.status(403).json({ message: 'Token inválido o expirado' });
-    req.user = decoded;
-    next();
-  });
 };
